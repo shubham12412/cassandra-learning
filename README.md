@@ -45,7 +45,7 @@ Decentralization, therefore, has two key advantages: it’s simpler to use than 
 
 -------------------------------------------------------------------------------------------------------------------
 
-
+### 2)Elastic Scalability
 
 
 
