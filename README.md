@@ -25,9 +25,9 @@ If you take a look, you’ll see that many of the features of shared-nothing dis
 
 
 -----------------------------------------------------------------------------------------------------------------
+https://learning.oreilly.com/library/view/cassandra-the-definitive/9781491933657/ch02.html
 
-
-Distributed and Decentralized
+#### 1)Distributed and Decentralized
 
 Cassandra is distributed, which means that it is capable of running on multiple machines while appearing to users as a unified whole.   In fact, there is little point in running a single Cassandra node. Although you can do it, and that’s acceptable for getting up to speed on how it works, you quickly realize that you’ll need multiple machines to really realize any benefit from running Cassandra. Much of its design and code base is specifically engineered toward not only making it work across many different machines, but also for optimizing performance across multiple data center racks, and even for a single Cassandra cluster running across geographically dispersed data centers. You can confidently write data to anywhere in the cluster and Cassandra will get it.
 
@@ -41,7 +41,9 @@ In many distributed data solutions (such as RDBMS clusters), you set up multiple
 
 Decentralization, therefore, has two key advantages: it’s simpler to use than master/slave, and it helps you avoid outages. It can be easier to operate and maintain a decentralized store than a master/slave store because all nodes are the same. That means that you don’t need any special knowledge to scale; setting up 50 nodes isn’t much different from setting up one. There’s next to no configuration required to support it. Moreover, in a master/slave setup, the master can become a single point of failure (SPOF). To avoid this, you often need to add some complexity to the environment in the form of multiple masters. Because all of the replicas in Cassandra are identical, failures of a node won’t disrupt service.
 
-In short, because Cassandra is distributed and decentralized, there is no single point of failure, which supports high availability.
+***In short, because Cassandra is distributed and decentralized, there is no single point of failure, which supports high availability.***
+
+-------------------------------------------------------------------------------------------------------------------
 
 
 
