@@ -4,4 +4,6 @@
 
 3) https://medium.com/outworkers/a-series-on-cassandra-part-2-indexes-and-keys-1351ece6055f
 
-4) 
+4) https://medium.com/outworkers/a-series-on-cassandra-part-3-advanced-features-73abed9d99ab
+
+
