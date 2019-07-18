@@ -2,4 +2,6 @@
 
 2) https://docs.datastax.com/en/archived/cassandra/3.0/cassandra/dml/dmlAboutReads.html
 
+3) https://docs.datastax.com/en/archived/cassandra/3.0/cassandra/dml/dmlClientRequestsReadExp.html
+
 
