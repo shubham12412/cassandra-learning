@@ -22,5 +22,10 @@
 13) DELETE FROM USER WHERE first_name='Bill';
 14) TRUNCATE user;
 15) DROP TABLE user;
-16) 
 
+--------------------------------------------------------------------------------------------------------------------
+
+16) ALTER TABLE user ADD title text;
+
+17) SELECT first_name, last_name, writetime(last_name) FROM user;
+18) 
