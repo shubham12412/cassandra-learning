@@ -99,8 +99,16 @@ Cassandra’s data model can be described as a partitioned row store, in which d
 
 ------------------------------------------------------------------------------------------------------------------
 
+### Is Cassandra a Good Fit for My Project?
 
+1) Large Deployments
+2) Lots of Writes, Statistics, and Analysis
 
+Consider your application from the perspective of the ratio of reads to writes. Cassandra is optimized for excellent throughput on writes.
+
+Many of the early production deployments of Cassandra involve storing user activity updates, social network usage, recommendations/reviews, and application statistics. These are strong use cases for Cassandra because they involve lots of writing with less predictable read operations, and because updates can occur unevenly with sudden spikes. In fact, the ability to handle application workloads that require high performance at significant write volumes with many concurrent client threads is one of the primary features of Cassandra.
+
+3) Geographical Distribution
 
 
 
