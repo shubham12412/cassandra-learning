@@ -31,7 +31,7 @@ So far we’ve been focusing on how Cassandra keeps track of the physical layout
 
 ***A node claims ownership of the range of values less than or equal to each token and greater than the token of the previous node***. The node with lowest token owns the range less than or equal to its token and the range greater than the highest token, which is also known as the “wrapping range.” In this way, the tokens specify a complete ring. Figure 6-2 shows a notional ring layout including the nodes in a single data center. This particular arrangement is structured such that consecutive token ranges are spread across nodes in different racks.
 
-![Example-ring-arrangement-of nodes-in-a-data-center.png](./img/Example-ring-arrangement-of nodes-in-a-data-center.png)
+![Example-ring-arrangement-of nodes-in-a-data-center.png](./img/Example-ring-arrangement-of-nodes-in-a-data-center.png)
 
 
 ***Data is assigned to nodes by using a hash function to calculate a token for the partition key. This partition key token is compared to the token values for the various nodes to identify the range, and therefore the node, that owns the data.***
@@ -102,21 +102,6 @@ If you’re new to Cassandra, the replication factor can sometimes be confused w
 Let’s bring these concepts together to discuss ***how Cassandra nodes interact to support reads and writes from client applications. below figure show the typical path of interactions with Cassandra.***
 
 ![Clients-coordinator-nodes-and replicas.png](./img/Clients-coordinator-nodes-and-replicas.png)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
