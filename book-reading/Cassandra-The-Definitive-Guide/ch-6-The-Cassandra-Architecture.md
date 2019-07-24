@@ -66,6 +66,45 @@ Because of Cassandra’s generally pluggable design, you can also create your ow
 ------------------------------------------------------------------------------------------------------------------------
 
 ### Replication Strategies
+A node serves as a replica for different ranges of data. If one node goes down, other replicas can respond to queries for that range of data. Cassandra replicates data across nodes in a manner transparent to the user, and the replication factor is the number of nodes in your cluster that will receive copies (replicas) of the same data. If your replication factor is 3, then three nodes in the ring will have copies of each row.
+
+The first replica will always be the node that claims the range in which the token falls, but the remainder of the replicas are placed according to the replication strategy (sometimes also referred to as the replica placement strategy). 
+
+Out of the box, Cassandra provides two primary implementations of this interface (extensions of the abstract class): SimpleStrategy and NetworkTopologyStrategy. The SimpleStrategy places replicas at consecutive nodes around the ring, starting with the node indicated by the partitioner. The NetworkTopologyStrategy allows you to specify a different replication factor for each data center. Within a data center, it allocates replicas to different racks in order to maximize availability.
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+
+### Consistency Levels
+
+Consistency Levels
+In Chapter 2, we discussed Brewer’s CAP theorem, in which consistency, availability, and partition tolerance are traded off against one another. ***Cassandra provides tuneable consistency levels that allow you to make these trade-offs at a fine-grained level***. You specify a consistency level on each read or write query that indicates how much consistency you require. ***A higher consistency level means that more nodes need to respond to a read or write query, giving you more assurance that the values present on each replica are the same.***
+
+For read queries, the consistency level specifies how many replica nodes must respond to a read request before returning the data. For write operations, the consistency level specifies how many replica nodes must respond for the write to be reported as successful to the client. Because Cassandra is eventually consistent, updates to other replica nodes may continue in the background.
+
+The available consistency levels include ONE, TWO, and THREE, each of which specify an absolute number of replica nodes that must respond to a request. ***The QUORUM consistency level requires  a response from a majority  of the replica nodes (sometimes expressed as “replication factor / 2 + 1”)***. The ALL consistency level requires a response from all of the replicas.
+
+
+For both reads and writes, the consistency levels of ANY, ONE, TWO, and THREE are considered weak, whereas QUORUM and ALL are considered strong. ***Consistency is tuneable in Cassandra because clients can specify the desired consistency level on both reads and writes.*** 
+
+***There is an equation that is popularly used to represent the way to achieve strong consistency in Cassandra: R + W > N = strong consistency***. 
+
+In this equation, R, W, and N are the read replica count, the write replica count, and the replication factor, respectively; all client reads will see the most recent write in this scenario, and you will have strong consistency.
+
+### DISTINGUISHING CONSISTENCY LEVELS AND REPLICATION FACTORS
+If you’re new to Cassandra, the replication factor can sometimes be confused with the consistency level. The replication factor is set per keyspace. The consistency level is specified per query, by the client. ***The replication factor indicates how many nodes you want to use to store a value during each write operation. The consistency level specifies how many nodes the client has decided must respond in order to feel confident of a successful read or write operation***. The confusion arises because the consistency level is based on the replication factor, not on the number of nodes in the system.
+
+------------------------------------------------------------------------------------------------------------------------
+
+### Queries and Coordinator Nodes
+
+
+
+
+
+
+
 
 
 
