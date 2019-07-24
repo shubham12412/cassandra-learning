@@ -99,7 +99,9 @@ If you’re new to Cassandra, the replication factor can sometimes be confused w
 
 ### Queries and Coordinator Nodes
 
+Let’s bring these concepts together to discuss ***how Cassandra nodes interact to support reads and writes from client applications. below figure show the typical path of interactions with Cassandra.***
 
+![Clients-coordinator-nodes-and replicas.png](./img/Clients-coordinator-nodes-and replicas.png)
 
 
 
