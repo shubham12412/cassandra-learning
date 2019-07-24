@@ -27,5 +27,22 @@ In Cassandra, however, sorting is treated differently; it is a design decision. 
 
 
 
+#### Breaking Up Large Partitions
+As discussed previously, our goal is to design tables that can provide the data we need with queries that touch a single partition, or failing that, the minimum possible number of partitions. However, as we have seen in our examples, it is quite possible to design wide row-style tables that approach Cassandra’s built-in limits. Performing sizing analysis on tables may reveal partitions that are potentially too large, either in number of values, size on disk, or both.
+
+***The technique for splitting a large partition is straightforward: add an additional column to the partition key. In most cases, moving one of the existing columns into the partition key will be sufficient. Another option is to introduce an additional column to the table to act as a sharding key, but this requires additional application logic.***
+
+Continuing to examine our available rooms example, if we add the date column to the partition key for the available_rooms_by_hotel_date table, each partition would then represent the availability of rooms at a specific hotel on a specific date. This will certainly yield partitions that are significantly smaller, perhaps too small, as the data for consecutive days will likely be on separate nodes.
+
+
+***Another technique known as bucketing is often used to break the data into moderate-size partitions. For example, we could bucketize our available_rooms_by_hotel_date table by adding a month column to the partition key. While this column is partially duplicative of the date, it provides a nice way of grouping related data in a partition that will not get too large***
+
+
+If we really felt strongly about preserving a wide row design, we could instead add the room_id to the partition key, so that each partition would represent the availability of the room across all dates. Because we haven’t identified a query that involves searching availability of a specific room, the first or second design approach is most suitable to our application needs.
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+
 
 
