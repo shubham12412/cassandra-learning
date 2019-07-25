@@ -62,6 +62,39 @@ session.execute("SELECT * from hotel.hotels");
 
 -------------------------------------------------------------------------------------------------------------
 
+### PREPARED STATEMENT
+While SimpleStatements are quite useful for creating ad hoc queries, most applications tend to perform the same set of queries repeatedly. The PreparedStatement is designed to handle these queries more efficiently. The structure of the statement is sent to nodes a single time for preparation, and a handle for the statement is returned. To use the prepared statement, only the handle and the parameters need to be sent.
+
+Before we get to that, however, let’s take a step back and discuss what is happening behind the scenes of the Session.prepare() operation. ***The driver passes the contents of our PreparedStatement to a Cassandra node and gets back a unique identifier for the statement***. This unique identifier is referenced when you create a BoundStatement. If you’re curious, you can actually see this reference by calling PreparedStatement.getPreparedID()
+
+
+***You can think of a PreparedStatement as a template for creating queries. In addition to specifying the form of our query, there are other attributes that we can set on a PreparedStatement that will be used as defaults for statements it is used to create, including a default consistency level, retry policy, and tracing.***
+
+
+In addition to improving efficiency, PreparedStatements also improve security by separating the query logic of CQL from the data. This provides protection against injection attacks, which attempt to embed commands into data fields in order to gain unauthorized access.
+
+---------------------------------------------------------------------------------------------------------------
+
+### BOUND STATEMENT
+Now our PreparedStatement is available for us to use to create queries. In order to make use of a PreparedStatement, we bind it with actual values by calling the bind() operation. For example, we can bind the SELECT statement we created earlier as follows:
+
+
+-----------------------------------------------------------------------------------------------------------------
+
+### BUILT STATEMENT AND THE QUERY BUILDER
+
+-----------------------------------------------------------------------------------------------------------------
+
+### OBJECT MAPPER
+We’ve explored several techniques for creating and executing query statements with the driver. There is one final technique that we’ll look at that provides a bit more abstraction. The Java driver provides an object mapper that allows you to focus on developing and interacting with domain models (or data types used on APIs). The object mapper works off of annotations in source code that are used to map Java classes to tables or user-defined types (UDTs).
+
+--------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
 
 
 
