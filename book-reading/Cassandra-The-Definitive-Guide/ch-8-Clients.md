@@ -89,6 +89,52 @@ Now our PreparedStatement is available for us to use to create queries. In order
 We’ve explored several techniques for creating and executing query statements with the driver. There is one final technique that we’ll look at that provides a bit more abstraction. The Java driver provides an object mapper that allows you to focus on developing and interacting with domain models (or data types used on APIs). The object mapper works off of annotations in source code that are used to map Java classes to tables or user-defined types (UDTs).
 
 --------------------------------------------------------------------------------------------------------------------
+### Policies
+The Java driver provides several policy interfaces that can be used to tune the behavior of the driver. These include policies for load balancing, retrying requests, and managing connections to nodes in the cluster.
+
+--------------------------------------------------------------------------------------------------------------------
+
+### RETRY POLICY
+When Cassandra nodes fail or become unreachable, the driver automatically and transparently tries other nodes and schedules reconnection to the dead nodes in the background. Because temporary changes in network conditions can also make nodes appear offline, the driver also provides a mechanism to retry queries that fail due to network-related errors. This removes the need to write retry logic in client code.
+
+-----------------------------------------------------------------------------------------------------------------
+
+### Metadata
+To access the cluster metadata, we invoke the Cluster.getMetadata() method. The com.datastax.driver.core.Metadata class provides information about the cluster including the cluster name, the schema including keyspaces and tables, and the known hosts in the cluster. 
+
+-----------------------------------------------------------------------------------------------------------------
+### NODE DISCOVERY
+A Cluster object maintains a permanent connection to one of the contact points, which it uses to maintain information on the state and topology of the cluster. Using this connection, the driver will discover all the nodes  currently in the cluster. The driver uses the com.datastax.driver.core.Host class to represent each node.
+
+
+-----------------------------------------------------------------------------------------------------------------
+
+### SCHEMA ACCESS
+The Metadata class also allows the client to learn about the schema in a cluster. The exportSchemaAsString() operation creates a String describing all of the keyspaces and tables defined in the cluster, including the system keyspaces. This output is equivalent to the cqlsh command DESCRIBE FULL SCHEMA. Additional operations support browsing the contents of individual keyspaces and tables.
+
+
+We’ve previously discussed Cassandra’s support for eventual consistency at great length in Chapter 2. ***Because schema information is itself stored using Cassandra, it is also eventually consistent, and as a result it is possible for different nodes to have different versions of the schema***. As of the 3.0 release, the Java driver does not expose the schema version directly, but you can see an example by running the nodetool describecluster command:
+
+-----------------------------------------------------------------------------------------------------------------
+
+### Debugging and Monitoring
+The driver provides features for monitoring and debugging your client’s use of Cassandra, including facilities for logging and metrics.  There is also a query tracing capability, 
+
+
+### LOGGING
+As we will learn in Chapter 10, Cassandra uses a logging API called Simple Logging Facade for Java (SLF4J). The Java driver uses the SLF4J API as well. In order to enable logging on your Java client application, you need to provide a compliant SLF4J implementation on the classpath.
+
+By default, the Java driver is set to use the DEBUG logging level, which is fairly verbose. We can configure logging by taking advantage of Logback’s configuration mechanism, which supports separate configuration for test and production environments. Logback inspects the classpath first for the file logback-test.xml representing the test configuration, and then if no test configuration is found, it searches for the file logback.xml.
+
+### METRICS
+Sometimes it can be helpful to monitor the behavior of client applications over time in order to detect abnormal conditions and debug errors. The Java driver collects metrics on its activities and makes these available using the Dropwizard Metrics library. The driver reports metrics on connections, task queues, queries, and errors such as connection errors, read and write timeouts, retries, and speculative executions.
+
+***You can access the Java driver metrics locally via the Cluster.getMetrics() operation***. The Metrics library also integrates with the Java Management Extensions (JMX) to allow remote monitoring of metrics. JMX reporting is enabled by default, but this can be overridden in the Configuration provided when building  a Cluster.  
+
+-----------------------------------------------------------------------------------------------------------------
+
+
+
 
 
 
