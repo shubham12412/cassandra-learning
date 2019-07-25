@@ -7,3 +7,6 @@
 4) https://stackoverflow.com/questions/22495409/how-to-run-cql-files-cql-from-within-cqlsh
 
 5) https://github.com/doanduyhai/Achilles
+
+6) https://github.com/dropwizard/metrics
+
