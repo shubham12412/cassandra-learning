@@ -1,4 +1,8 @@
-https://learning.oreilly.com/library/view/cassandra-the-definitive/9781491933657/ch01.html
+1) https://learning.oreilly.com/library/view/cassandra-the-definitive/9781491933657/ch01.html
 
-https://github.com/jeffreyscarpenter/cassandra-guide
+2) https://github.com/jeffreyscarpenter/cassandra-guide
+
+3) https://github.com/jeffreyscarpenter/cassandra-guide/tree/master/resources
+
+4) https://stackoverflow.com/questions/22495409/how-to-run-cql-files-cql-from-within-cqlsh
 
