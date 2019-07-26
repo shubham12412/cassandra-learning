@@ -143,6 +143,66 @@ The Bloom filter does not guarantee that the SSTable contains the partition, onl
 
 7) If the offset for the partition key is found, Cassandra accesses the SSTable at the specified offset and starts reading data.
 
+------------------------------------------------------------------------------------------------------------------------
+
+***Once data has been obtained from all of the SSTables, Cassandra merges the SSTable data and memtable data by selecting the value with the latest timestamp for each requested column. Any tombstones encountered are ignored.***
+
+-------------------------------------------------------------------------------------------------------------------------
+
+Finally, the merged data can be added to the row cache (if enabled) and returned to the client or coordinator node. A digest request is handled in much the same way as a regular read request, with the additional step that a digest is calculated on the result data and returned instead of the data itself.
+
+--------------------------------------------------------------------------------------------------------------------------
+### Read Repair
+
+Here’s how read repair works: the coordinator makes a full read request from all of the replica nodes. The coordinator node merges the data by selecting a value for each requested column. It compares the values returned from the replicas and returns the value that has the latest timestamp. If Cassandra finds different values stored with the same timestamp, it will compare the values lexicographically and choose the one that has the greater value. This case should be exceedingly rare. The merged data is the value that is returned to the client.
+
+***Asynchronously, the coordinator identifies any replicas that return obsolete data and issues a read-repair request to each of these replicas to update their data based on the merged data.***
+
+The read repair may be performed either before or after the return to the client. If you are using one of the two stronger consistency levels (QUORUM or ALL), then the read repair happens before data is returned to the client. If the client specifies a weak consistency level (such as ONE), then the read repair is optionally performed in the background after returning to the client. The percentage of reads that result in background repairs for a given table is determined by the read_repair_chance and dc_local_read_repair_chance options for the table.
+
+------------------------------------------------------------------------------------------------------------------
+
+### Range Queries, Ordering and Filtering
+
+First, let’s examine how to use the ***WHERE clause that Cassandra provides for reading ranges of data within a partition, sometimes called slices***.
+
+
+### BULK LOADING OPTIONS
+In using Cassandra, you’ll often find it useful to be able to load test or reference data into a cluster. Fortunately, there are a couple of easy ways to bulk load formatted data to and from Cassandra. 
+
+***cqlsh supports loading and unloading of comma-separated variable (CSV) files via the COPY command.***
+
+cqlsh:hotel> COPY hotels TO 'hotels.csv' WITH HEADER=TRUE;
+
+cqlsh:hotel> COPY hotels FROM 'hotels.csv' WITH HEADER=true;
+
+The COPY command supports other options to configure how quotes, escapes, and times are represented.
+
+---------------------------------------------------------------------------------------------------------------
+
+### Paging
+
+---------------------------------------------------------------------------------------------------------------
+
+### Deleting
+Deleting data is not the same in Cassandra as it is in a relational database. In an RDBMS, you simply issue a delete statement that identifies the row or rows you want to delete. In Cassandra, a delete does not actually remove the data immediately. There’s a simple reason for this: Cassandra’s durable, eventually consistent, distributed design. ***If Cassandra had a traditional design for deletes, any nodes that were down at the time of a delete would not receive the delete. Once one of these nodes came back online, it would mistakenly think that all of the nodes that had received the delete had actually missed a write (the data that it still has because it missed the delete), and it would start repairing all of the other nodes. So Cassandra needs a more sophisticated mechanism to support deletes. That mechanism is called a tombstone.***
+
+
+
+A tombstone is a special marker issued in a delete that overwrites the deleted values, acting as a placeholder. If any replica did not receive the delete operation, the tombstone can later be propagated to those replicas when they are available again. ***The net effect of this design is that your data store will not immediately shrink in size following a delete. Each node keeps track of the age of all its tombstones. Once they reach the age as configured in gc_grace_seconds (which is 10 days by default), then a compaction is run, the tombstones are garbage-collected, and the corresponding disk space is recovered.***
+
+
+Because SSTables are immutable, the data is not deleted from the SSTable. On compaction, tombstones are accounted for, merged data is sorted, a new index is created over the sorted data, and the freshly merged, sorted, and indexed data is written to a single new file. The assumption is that 10 days is plenty of time for you to bring a failed node back online before compaction runs. If you feel comfortable doing so, you can reduce that grace period to reclaim disk space more quickly.
+
+
+### CONSISTENCY LEVELS FOR DELETION
+Because a delete is a form of write, the consistency levels available for deletes are the same as those listed for writes.
+
+
+
+
+
+
 
 
 
