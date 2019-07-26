@@ -10,3 +10,5 @@
 
 6) https://github.com/dropwizard/metrics
 
+7) https://stackoverflow.com/questions/26244456/internals-of-partition-summary-in-cassandra
+
