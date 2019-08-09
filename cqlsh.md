@@ -29,3 +29,9 @@
 
 17) SELECT first_name, last_name, writetime(last_name) FROM user;
 18) 
+
+
+------------------------------------------------------------------------------------------------------------------
+
+https://thelastpickle.com/blog/2016/02/18/dropping-columns.html
+
